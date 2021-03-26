@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Document</title>
+
+
+
+  <style type="text/css">
+
+    /* a태그 변형 방지 */
+    a, a:link, a:visited { text-decoration: none !important; }
+
+    /* main컨텐츠 늘어나면 스크롤 생성 (y축 세로막대만) */
+    body {
+      overflow-y: scroll !important;
+    }
+    
+
+    /* 폰트 */
+    @font-face {
+      font-family: 'RIDIBatang';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.0/RIDIBatang.woff') format('woff');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    /* 전체 마진 패딩 0, 폰트 지정 */
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: 'RIDIBatang';
+    }
+
+    /* IE에서 웹폰트 사용시 br태그가 깨져서 기본 폰트로 적용해준다. */
+        br {
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    /* left(사이드바) 영역 잡기*/
+    .left {
+      width: 210px;
+      height: 100vh;
+      position: fixed;
+      display: inline-block;
+    }
+
+     /* 컨텐츠 (상단 배너 포트폴리오, q&a, 등 게시판, 푸터) 영역 잡기*/
+    .content {
+      left: 240px;
+      top: 20px;
+      width: 850px;
+      position: relative;
+    }
+
+    /* 컨텐츠 간의 글 간격 조정 */
+    .top_banner,
+    .main,
+    .bottom {
+      margin-bottom: 20px;
+    }
+
+    /* 상단배너 높이 */
+    .top_banner {
+      height: 100px;
+    }
+
+
+    /* 컨텐츠 메인 (게시판들) 영역 잡기 */
+    .main {
+      height: 580px;
+      display:block;
+    }
+    
+    /* 인기포트폴리오 테이블 영역 (메인 프로젝트/포트폴리오 게시판) td 간격 주기위한 설정*/
+    .port_table td {
+     font-size: 13px;
+     overflow:hidden;
+     padding:5px !important;
+    }
+
+    /*인기 포트폴리오 테이블 span 영역 */
+    .port_span {
+      width:180px; 
+      display:block; 
+      overflow:hidden; 
+      white-space:nowrap; 
+      text-overflow: ellipsis;
+      text-align:left;
+      margin-left:12px;
+      margin-top:5px;
+      margin-bottom: 5px;
+      top:5px;
+      position: relative;
+    }
+
+    /* 푸터 폭, 폰트사이즈 */
+    .footer {
+      height: 100px;
+    }
+    .footer_span {
+      font-size: 11px;
+    }
+
+    /* 우측배너 영역 잡기 */
+
+    .fixed_banner {
+      position: fixed;
+      width: 180px;
+      height: 550px;
+      left: 1120px;
+      top: 20px;
+    }
+
+
+    /* QA 게시판 SPAN 영역*/
+    .qa_span {
+      font-size: 15px;
+      display:block; 
+      overflow:hidden; 
+      white-space:nowrap; 
+      text-overflow: ellipsis;
+    }
+
+    /* 사이드바 영역 로그인 했을때 활성화되는 drop down 메뉴 */
+    .dropdown {
+      position: relative;
+      top: 30px;
+    }
+
+    /* 사이드바 메뉴영역 여백 */
+    .left_list_ul {
+      position: relative;
+      top: 30px;
+    }
+
+    /* 사이드바 메뉴 탭간 여백 */
+    .left_list_ul>li>a {
+      margin-bottom: 25px;
+    }
+
+    /*로그인,회원가입,id찾기,pw찾기 버튼 */
+    .btn-notlogin {
+      width:80px;
+      height:40px;
+      margin-bottom: 10px;
+    }
+
+
+  </style>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"
+    integrity="sha384-SR1sx49pcuLnqZUnnPwx6FCym0wLsk5JZuNx2bPPENzswTNFaQU1RDvt3wT4gWFG"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js"
+    integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc"
+    crossorigin="anonymous"></script>
+  <link href="sidebars.css" rel="stylesheet">
+
+</head>
+
+<body>
+  <div class="left">
+    <div class="d-flex flex-column p-3 text-white bg-dark" style="width: 100%; height:100%; z-index: 1;">
+      <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+        <span style="font-size:40px; text-align: center; font-weight: bold; left:8px; position:relative;">IT TALK</span>
+        <br><br>
+      </a>
+      <hr>
+      <!-- 로그인시 보여줄 영역-->
+      <div class="dropdown">
+        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1"
+          data-bs-toggle="dropdown" aria-expanded="false">
+          <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle me-2">
+          <strong>hyojun9292</strong>
+        </a>
+        <br>
+        <a style="font-size:15px;" class="text-white" href="#">P : 900</a>
+        <br>
+        <a style="font-size:15px;" class="text-white" href="#">쪽지함</a>
+        <hr>
+        <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+          <li><a class="dropdown-item" href="#">마이페이지</a></li>
+          <li><a class="dropdown-item" href="#">내가 쓴 글</a></li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+          <li><a class="dropdown-item" href="#">로그아웃</a></li>
+        </ul>
+        <!-- 비로그인시 보여줄 영역 -->
+        <input type="button" class="btn btn-primary btn-notlogin" value="로그인">
+        <input type="button" class="btn btn-primary btn-notlogin" value="회원가입">
+        <input type="button" class="btn btn-primary btn-notlogin" value="ID찾기">
+        <input type="button" class="btn btn-primary btn-notlogin" value="PW찾기">
+        <hr>
+      </div>
+
+
+      <ul class="nav nav-pills flex-column mb-auto left_list_ul">
+        <li class="nav-item">
+          <a href="#" class="nav-link text-white">
+            <svg class="bi me-2" width="16" height="16">
+              <use xlink:href="#home" />
+            </svg>
+            공지사항
+          </a>
+        </li>
+        <li>
+          <a href="#" class="nav-link text-white">
+            <svg class="bi me-2" width="16" height="16">
+              <use xlink:href="#speedometer2" />
+            </svg>
+            포트폴리오
+          </a>
+        </li>
+        <li>
+          <a href="#" class="nav-link text-white">
+            <svg class="bi me-2" width="16" height="16">
+              <use xlink:href="table" />
+            </svg>
+            Q & A
+          </a>
+        </li>
+        <li>
+          <a href="#" class="nav-link text-white">
+            <svg class="bi me-2" width="16" height="16">
+              <use xlink:href="#grid" />
+            </svg>
+            스터디 구인
+          </a>
+        </li>
+        <li>
+          <a href="#" class="nav-link text-white">
+            <svg class="bi me-2" width="16" height="16">
+              <use xlink:href="#grid" />
+            </svg>
+            채용 정보
+          </a>
+        </li>
+        <li>
+          <a href="#" class="nav-link text-white">
+            <svg class="bi me-2" width="16" height="16">
+              <use xlink:href="#people-circle" />
+            </svg>
+            기업 문의
+          </a>
+        </li>
+        <li>
+          <a href="#" class="nav-link text-white">
+            <svg class="bi me-2" width="16" height="16">
+              <use xlink:href="#people-circle" />
+            </svg>
+            화상 면접
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div> <!-- 사이드바 -->
+
+  <!-- 컨텐츠 영역  
+       상단배너, 메인(게시판 내용 4개), FOOTER -->
+  <div class="content">
+
+    <!-- 상단 배너 -->
+    <div class="top_banner"><img src="https://tpc.googlesyndication.com/daca_images/simgad/18229206848089917429"></div>
+
+    <!-- 메인 (게시판들/푸터) -->
+    <div class="main">
+
+      <h3 style="color:#212529"><b>인기 포트폴리오/프로젝트</b></h3>
+      <table class="port_table table table-bordered text-center">
+        <tr>
+          <td style="width:180px;">
+            <img src="TJA.jpg" style="width:180px; height:150px;">
+            <span class="port_span"><span style="color:gray";>2021/03/25 20:40</span></span>
+            <span class="port_span">추천수 : 612</span>
+            <span class="port_span"><img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle me-2"> hyojun9292</span>
+            <span class="port_span">KH1조 프로젝트프로프로젝트프로프로젝트프로프로젝트프로</span>
+          </td>
+          <td style="width:180px;">
+            <img src="TJA.jpg" style="width:180px; height:150px;">
+            <span class="port_span"><span style="color:gray";>2021/03/25 20:40</span></span>
+            <span class="port_span">추천수 : 612</span>
+            <span class="port_span"><img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle me-2"> hyojun9292</span>
+            <span class="port_span">KH1조 프로젝트프로프로젝트프로프로젝트프로프로젝트프로</span>
+          </td>
+          <td style="width:180px;">
+            <img src="TJA.jpg" style="width:180px; height:150px;">
+            <span class="port_span"><span style="color:gray";>2021/03/25 20:40</span></span>
+            <span class="port_span">추천수 : 612</span>
+            <span class="port_span"><img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle me-2"> hyojun9292</span>
+            <span class="port_span">KH1조 프로젝트프로프로젝트프로프로젝트프로프로젝트프로</span>
+          </td>
+          <td style="width:180px;">
+            <img src="TJA.jpg" style="width:180px; height:150px;">
+            <span class="port_span"><span style="color:gray";>2021/03/25 20:40</span></span>
+            <span class="port_span">추천수 : 612</span>
+            <span class="port_span"><img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle me-2"> hyojun9292</span>
+            <span class="port_span">KH1조 프로젝트프로프로젝트프로프로젝트프로프로젝트프로</span>
+          </td>
+        </tr>
+        <tr>
+          <td style="width:180px;">
+            <img src="TJA.jpg" style="width:180px; height:150px;">
+            <span class="port_span"><span style="color:gray";>2021/03/25 20:40</span></span>
+            <span class="port_span">추천수 : 612</span>
+            <span class="port_span"><img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle me-2"> hyojun9292</span>
+            <span class="port_span">KH1조 프로젝트프로프로젝트프로프로젝트프로프로젝트프로</span>
+          </td>
+          <td style="width:180px;">
+            <img src="TJA.jpg" style="width:180px; height:150px;">
+            <span class="port_span"><span style="color:gray";>2021/03/25 20:40</span></span>
+            <span class="port_span">추천수 : 612</span>
+            <span class="port_span"><img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle me-2"> hyojun9292</span>
+            <span class="port_span">KH1조 프로젝트프로프로젝트프로프로젝트프로프로젝트프로</span>
+          </td>
+          <td style="width:180px;">
+            <img src="TJA.jpg" style="width:180px; height:150px;">
+            <span class="port_span"><span style="color:gray";>2021/03/25 20:40</span></span>
+            <span class="port_span">추천수 : 612</span>
+            <span class="port_span"><img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle me-2"> hyojun9292</span>
+            <span class="port_span">KH1조 프로젝트프로프로젝트프로프로젝트프로프로젝트프로</span>
+          </td>
+          <td style="width:180px;">
+            <img src="TJA.jpg" style="width:180px; height:150px;">
+            <span class="port_span"><span style="color:gray";>2021/03/25 20:40</span></span>
+            <span class="port_span">추천수 : 612</span>
+            <span class="port_span"><img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle me-2"> hyojun9292</span>
+            <span class="port_span">KH1조 프로젝트프로프로젝트프로프로젝트프로프로젝트프로</span>
+          </td>
+        </tr>
+      </table>
+
+      <br>
+      <h3><b>Q & A</b></h3>
+      <table class="table table-bordered">
+        <col width="550">
+        <col width="150">
+        <col width="100">
+        <tr>
+          <td><span class="qa_span" style="width:550px;"><span style="color:red"><b>[JAVA]</b></span> 글 내용 어쩌고 저쩌고 글 내용 어쩌고 저쩌고 글 내용asdfasdfasdfasdfasdfasdfasdfasdfasdf</span></td>
+          <td><span class="qa_span" style="width:150px;"><img src="https://github.com/mdo.png" alt="mdo" width="25" height="25" class="rounded-circle me-2">hyojun9292</span></td>
+          <td><span class="qa_span" style="width:100px; "><span style="color:gray; font-size:11px;">2021/03/25 20:40</span></span></td>
+        </tr>
+        <tr>
+          <td><span class="qa_span" style="width:550px;"><span style="color:orange"><b>[기타]</b></span> 글 내용 어쩌고 저쩌고 글 내용 어쩌고 저쩌고 글 내용asdfasdfasdfasdfasdfasdfasdfasdfasdf</span></td>
+          <td><span class="qa_span" style="width:150px;"><img src="https://github.com/mdo.png" alt="mdo" width="25" height="25" class="rounded-circle me-2">hyojun9292</span></td>
+          <td><span class="qa_span" style="width:100px; "><span style="color:gray; font-size:11px;">2021/03/25 20:40</span></span></td>
+        </tr>
+        <tr>
+          <td><span class="qa_span" style="width:550px;">글 내용 어쩌고 저쩌고 글 내용 어쩌고 저쩌고 글 내용asdfasdfasdfasdfasdfasdfasdfasdfasdf</span></td>
+          <td><span class="qa_span" style="width:150px;"><img src="https://github.com/mdo.png" alt="mdo" width="25" height="25" class="rounded-circle me-2">hyojun9292</span></td>
+          <td><span class="qa_span" style="width:100px; "><span style="color:gray; font-size:11px;">2021/03/25 20:40</span></span></td>
+        </tr>
+        <tr>
+          <td><span class="qa_span" style="width:550px;">글 내용 어쩌고 저쩌고 글 내용 어쩌고 저쩌고 글 내용asdfasdfasdfasdfasdfasdfasdfasdfasdf</span></td>
+          <td><span class="qa_span" style="width:150px;"><img src="https://github.com/mdo.png" alt="mdo" width="25" height="25" class="rounded-circle me-2">hyojun9292</span></td>
+          <td><span class="qa_span" style="width:100px; "><span style="color:gray; font-size:11px;">2021/03/25 20:40</span></span></td>
+        </tr>
+        <tr>
+          <td><span class="qa_span" style="width:550px;">글 내용 어쩌고 저쩌고 글 내용 어쩌고 저쩌고 글 내용asdfasdfasdfasdfasdfasdfasdfasdfasdf</span></td>
+          <td><span class="qa_span" style="width:150px;"><img src="https://github.com/mdo.png" alt="mdo" width="25" height="25" class="rounded-circle me-2">hyojun9292</span></td>
+          <td><span class="qa_span" style="width:100px; "><span style="color:gray; font-size:11px;">2021/03/25 20:40</span></span></td>
+        </tr>
+        <tr>
+          <td><span class="qa_span" style="width:550px;">글 내용 어쩌고 저쩌고 글 내용 어쩌고 저쩌고 글 내용asdfasdfasdfasdfasdfasdfasdfasdfasdf</span></td>
+          <td><span class="qa_span" style="width:150px;"><img src="https://github.com/mdo.png" alt="mdo" width="25" height="25" class="rounded-circle me-2">hyojun9292</span></td>
+          <td><span class="qa_span" style="width:100px; "><span style="color:gray; font-size:11px;">2021/03/25 20:40</span></span></td>
+        </tr>
+        <tr>
+          <td><span class="qa_span" style="width:550px;">글 내용 어쩌고 저쩌고 글 내용 어쩌고 저쩌고 글 내용asdfasdfasdfasdfasdfasdfasdfasdfasdf</span></td>
+          <td><span class="qa_span" style="width:150px;"><img src="https://github.com/mdo.png" alt="mdo" width="25" height="25" class="rounded-circle me-2">hyojun9292</span></td>
+          <td><span class="qa_span" style="width:100px; "><span style="color:gray; font-size:11px;">2021/03/25 20:40</span></span></td>
+        </tr>
+      </table>
+      <br>
+      <h3><b>스터디 구인</b></h3>
+      <table class="table table-bordered">
+        <col width="550">
+        <col width="150">
+        <col width="100">
+        <tr>
+          <td><span class="qa_span" style="width:550px;"><span style="color:red"><b>[모집중]</b></span> 글 내용 어쩌고 저쩌고 글 내용 어쩌고 저쩌고 글 내용asdfasdfasdfasdfasdfasdfasdfasdfasdf</span></td>
+          <td><span class="qa_span" style="width:150px;"><img src="https://github.com/mdo.png" alt="mdo" width="25" height="25" class="rounded-circle me-2">hyojun9292</span></td>
+          <td><span class="qa_span" style="width:100px; "><span style="color:gray; font-size:11px;">2021/03/25 20:40</span></span></td>
+        </tr>
+        <tr>
+          <td><span class="qa_span" style="width:550px;"><span style="color:gray"><b>[모집완료]</b></span> 글 내용 어쩌고 저쩌고 글 내용 어쩌고 저쩌고 글 내용asdfasdfasdfasdfasdfasdfasdfasdfasdf</span></td>
+          <td><span class="qa_span" style="width:150px;"><img src="https://github.com/mdo.png" alt="mdo" width="25" height="25" class="rounded-circle me-2">hyojun9292</span></td>
+          <td><span class="qa_span" style="width:100px; "><span style="color:gray; font-size:11px;">2021/03/25 20:40</span></span></td>
+        </tr>
+        <tr>
+          <td><span class="qa_span" style="width:550px;">글 내용 어쩌고 저쩌고 글 내용 어쩌고 저쩌고 글 내용asdfasdfasdfasdfasdfasdfasdfasdfasdf</span></td>
+          <td><span class="qa_span" style="width:150px;"><img src="https://github.com/mdo.png" alt="mdo" width="25" height="25" class="rounded-circle me-2">hyojun9292</span></td>
+          <td><span class="qa_span" style="width:100px; "><span style="color:gray; font-size:11px;">2021/03/25 20:40</span></span></td>
+        </tr>
+        <tr>
+          <td><span class="qa_span" style="width:550px;">글 내용 어쩌고 저쩌고 글 내용 어쩌고 저쩌고 글 내용asdfasdfasdfasdfasdfasdfasdfasdfasdf</span></td>
+          <td><span class="qa_span" style="width:150px;"><img src="https://github.com/mdo.png" alt="mdo" width="25" height="25" class="rounded-circle me-2">hyojun9292</span></td>
+          <td><span class="qa_span" style="width:100px; "><span style="color:gray; font-size:11px;">2021/03/25 20:40</span></span></td>
+        </tr>
+        <tr>
+          <td><span class="qa_span" style="width:550px;">글 내용 어쩌고 저쩌고 글 내용 어쩌고 저쩌고 글 내용asdfasdfasdfasdfasdfasdfasdfasdfasdf</span></td>
+          <td><span class="qa_span" style="width:150px;"><img src="https://github.com/mdo.png" alt="mdo" width="25" height="25" class="rounded-circle me-2">hyojun9292</span></td>
+          <td><span class="qa_span" style="width:100px; "><span style="color:gray; font-size:11px;">2021/03/25 20:40</span></span></td>
+        </tr>
+        <tr>
+          <td><span class="qa_span" style="width:550px;">글 내용 어쩌고 저쩌고 글 내용 어쩌고 저쩌고 글 내용asdfasdfasdfasdfasdfasdfasdfasdfasdf</span></td>
+          <td><span class="qa_span" style="width:150px;"><img src="https://github.com/mdo.png" alt="mdo" width="25" height="25" class="rounded-circle me-2">hyojun9292</span></td>
+          <td><span class="qa_span" style="width:100px; "><span style="color:gray; font-size:11px;">2021/03/25 20:40</span></span></td>
+        </tr>
+        <tr>
+          <td><span class="qa_span" style="width:550px;">글 내용 어쩌고 저쩌고 글 내용 어쩌고 저쩌고 글 내용asdfasdfasdfasdfasdfasdfasdfasdfasdf</span></td>
+          <td><span class="qa_span" style="width:150px;"><img src="https://github.com/mdo.png" alt="mdo" width="25" height="25" class="rounded-circle me-2">hyojun9292</span></td>
+          <td><span class="qa_span" style="width:100px; "><span style="color:gray; font-size:11px;">2021/03/25 20:40</span></span></td>
+        </tr>
+      </table>
+      <br>
+      <h3><b>채용 정보</b></h3>
+      <table class="table table-bordered">
+        <col width="550">
+        <col width="150">
+        <col width="100">
+        <tr>
+          <td><span class="qa_span" style="width:550px;"><span style="color:navy"><b>[사명]</b></span>  <span style="color:red"><b>[우대언어]</b></span>  <span style="color:green"><b>[경력]</b></span> 글 내용 어쩌고 저쩌고 글 내용 어쩌고 저쩌고 글 내용asdfasdfasdfasdfasdfasdfasdfasdfasdf</span></td>
+          <td><span class="qa_span" style="width:150px;"><img src="https://github.com/mdo.png" alt="mdo" width="25" height="25" class="rounded-circle me-2">hyojun9292</span></td>
+          <td><span class="qa_span" style="width:100px;"><span style="color:gray; font-size:11px;">2021/03/25 20:40</span></span></td>
+        </tr>
+        <tr>
+          <td><span class="qa_span" style="width:550px;">글 내용 어쩌고 저쩌고 글 내용 어쩌고 저쩌고 글 내용asdfasdfasdfasdfasdfasdfasdfasdfasdf</span></td>
+          <td><span class="qa_span" style="width:150px;"><img src="https://github.com/mdo.png" alt="mdo" width="25" height="25" class="rounded-circle me-2">hyojun9292</span></td>
+          <td><span class="qa_span" style="width:100px;"><span style="color:gray; font-size:11px;">2021/03/25 20:40</span></span></td>
+        </tr>
+        <tr>
+          <td><span class="qa_span" style="width:550px;">글 내용 어쩌고 저쩌고 글 내용 어쩌고 저쩌고 글 내용asdfasdfasdfasdfasdfasdfasdfasdfasdf</span></td>
+          <td><span class="qa_span" style="width:150px;"><img src="https://github.com/mdo.png" alt="mdo" width="25" height="25" class="rounded-circle me-2">hyojun9292</span></td>
+          <td><span class="qa_span" style="width:100px;"><span style="color:gray; font-size:11px;">2021/03/25 20:40</span></span></td>
+        </tr>
+        <tr>
+          <td><span class="qa_span" style="width:550px;">글 내용 어쩌고 저쩌고 글 내용 어쩌고 저쩌고 글 내용asdfasdfasdfasdfasdfasdfasdfasdfasdf</span></td>
+          <td><span class="qa_span" style="width:150px;"><img src="https://github.com/mdo.png" alt="mdo" width="25" height="25" class="rounded-circle me-2">hyojun9292</span></td>
+          <td><span class="qa_span" style="width:100px;"><span style="color:gray; font-size:11px;">2021/03/25 20:40</span></span></td>
+        </tr>
+        <tr>
+          <td><span class="qa_span" style="width:550px;">글 내용 어쩌고 저쩌고 글 내용 어쩌고 저쩌고 글 내용asdfasdfasdfasdfasdfasdfasdfasdfasdf</span></td>
+          <td><span class="qa_span" style="width:150px;"><img src="https://github.com/mdo.png" alt="mdo" width="25" height="25" class="rounded-circle me-2">hyojun9292</span></td>
+          <td><span class="qa_span" style="width:100px;"><span style="color:gray; font-size:11px;">2021/03/25 20:40</span></span></td>
+        </tr>
+        <tr>
+          <td><span class="qa_span" style="width:550px;">글 내용 어쩌고 저쩌고 글 내용 어쩌고 저쩌고 글 내용asdfasdfasdfasdfasdfasdfasdfasdfasdf</span></td>
+          <td><span class="qa_span" style="width:150px;"><img src="https://github.com/mdo.png" alt="mdo" width="25" height="25" class="rounded-circle me-2">hyojun9292</span></td>
+          <td><span class="qa_span" style="width:100px;"><span style="color:gray; font-size:11px;">2021/03/25 20:40</span></span></td>
+        </tr>
+        <tr>
+          <td><span class="qa_span" style="width:550px;">글 내용 어쩌고 저쩌고 글 내용 어쩌고 저쩌고 글 내용asdfasdfasdfasdfasdfasdfasdfasdfasdf</span></td>
+          <td><span class="qa_span" style="width:150px;"><img src="https://github.com/mdo.png" alt="mdo" width="25" height="25" class="rounded-circle me-2">hyojun9292</span></td>
+          <td><span class="qa_span" style="width:100px;"><span style="color:gray; font-size:11px;">2021/03/25 20:40</span></span></td>
+        </tr>
+      </table>
+      <!-- 푸터 -->
+      <footer class="footer mt-auto py-3 bg-light">
+         <div class="container">
+           <span class="text-muted footer_span">COPYRIGHT &copy; KH 1조 PROJECT <br> 팀명 : 미정 | 팀장명 : 박성민 | 사업자등록번호 : 100-00-00000 | 문의 : KH@KH.COM
+            <br>주소 : 서울 강남구 테헤란로14길 6 남도빌딩 2층, 3층, 4층
+            @ 2021 KH 1조
+            </span>
+        </div>
+      </footer>
+
+    </div>
+
+    <!-- 우측 배너 -->
+    <div class="fixed_banner"><img
+        src="https://tpc.googlesyndication.com/simgad/8421620864531224121?sqp=4sqPyQQ7QjkqNxABHQAAtEIgASgBMAk4A0DwkwlYAWBfcAKAAQGIAQGdAQAAgD-oAQGwAYCt4gS4AV_FAS2ynT4&rs=AOga4qmGwBtwHWvdI2S6T9fQHUhVOx8YkA">
+    </div>
+  </div>
+</body>
+<script src="./assets/dist/js/bootstrap.bundle.min.js"></script>
+<script src="sidebars.js"></script>
+</html>
